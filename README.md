@@ -1,6 +1,6 @@
 # KARA-AI-Powered-Chatbot
 
-# Restaurant Chatbot - Pandeyji Eatery 🍽️
+# Restaurant Chatbot - Sattva🍽️
 
 An intelligent restaurant ordering and tracking system built with modern web technologies. This project demonstrates a full-stack chatbot solution that enables customers to place orders through natural language processing and track their orders in real-time.
 
