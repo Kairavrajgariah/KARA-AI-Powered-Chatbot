@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sattva Restaurant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #232946;
+        --accent: #eebbc3;
+        --bg1: #e0e7ff;
+        --bg2: #f8fafc;
+        --bg3: #f3e8ee;
+        --glass-bg: rgba(255,255,255,0.55);
+        --glass-border: rgba(238,187,195,0.25);
+        --muted: #8a8fa3;
+        --shadow: 0 8px 32px rgba(35,41,70,0.13);
+        --navbar-underline: linear-gradient(90deg, #eebbc3 0%, #232946 100%);
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: linear-gradient(120deg, var(--bg1), var(--bg2), var(--bg3));
+        background-size: 200% 200%;
+        animation: gradientMove 8s ease-in-out infinite;
+        color: var(--primary);
+        font-family: 'Inter', Arial, sans-serif;
+        font-size: 17px;
+      }
+      @keyframes gradientMove {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+      }
+      .navbar {
+        width: 100%;
+        background: rgba(255,255,255,0.7);
+        box-shadow: var(--shadow);
+        padding: 22px 0 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(8px);
+      }
+      .navbar .logo {
+        font-family: 'Inter', Arial, sans-serif;
+        font-weight: 700;
+        font-size: 1.7em;
+        letter-spacing: 2px;
+        color: var(--primary);
+        text-decoration: none;
+        position: relative;
+        margin-left: 40px;
+      }
+      .navbar .logo::after {
+        content: '';
+        display: block;
+        margin: 8px auto 0 auto;
+        width: 36px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--navbar-underline);
+        transition: width 0.3s;
+      }
+      .navbar .logo:hover::after {
+        width: 60px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-right: 40px;
+      }
+      .nav-link {
+        font-family: 'Inter', Arial, sans-serif;
+        font-weight: 600;
+        font-size: 1.08em;
+        color: var(--primary);
+        text-decoration: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 18px;
+        border-radius: 18px;
+        transition: background 0.18s, color 0.18s;
+      }
+      .nav-link:hover, .nav-link.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 100;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+        background: rgba(35,41,70,0.18);
+        backdrop-filter: blur(2px);
+      }
+      .modal-content {
+        background: var(--glass-bg);
+        margin: 80px auto;
+        padding: 36px 32px 28px 32px;
+        border: 1.5px solid var(--glass-border);
+        border-radius: 28px;
+        max-width: 420px;
+        box-shadow: 0 8px 32px rgba(35,41,70,0.13);
+        position: relative;
+        font-family: 'Inter', Arial, sans-serif;
+        animation: modalIn 0.25s;
+      }
+      @keyframes modalIn {
+        from { transform: translateY(40px) scale(0.97); opacity: 0; }
+        to { transform: translateY(0) scale(1); opacity: 1; }
+      }
+      .close {
+        color: var(--muted);
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        font-size: 1.5em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: color 0.18s;
+      }
+      .close:hover {
+        color: var(--accent);
+      }
+      .modal-content h2 {
+        margin-top: 0;
+        font-size: 1.5em;
+        color: var(--primary);
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .modal-content p, .modal-content ul {
+        color: var(--muted);
+        font-size: 1.08em;
+        margin-bottom: 0;
+      }
+      .modal-content ul {
+        padding-left: 18px;
+        margin-top: 8px;
+      }
+      .modal-content li {
+        margin-bottom: 6px;
+      }
+      /* Responsive */
+      @media (max-width: 900px) {
+        .navbar .logo { margin-left: 12px; }
+        .nav-links { margin-right: 12px; gap: 16px; }
+        .modal-content { max-width: 95vw; padding: 24px 8px 18px 8px; }
+      }
+      /* ...rest of your previous styles... */
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        padding: 100px 16px 80px 16px;
+        background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        position: relative;
+      }
+      .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(246,247,251,0.92) 60%, rgba(238,187,195,0.60) 100%);
+        z-index: 0;
+        backdrop-filter: blur(2px);
+      }
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: var(--glass-bg);
+        border-radius: 32px;
+        padding: 48px 36px 36px 36px;
+        box-shadow: 0 8px 32px rgba(35,41,70,0.10);
+        border: 1.5px solid var(--glass-border);
+        backdrop-filter: blur(8px);
+        margin-bottom: 0;
+      }
+      .hero h1 {
+        font-size: 3.2em;
+        font-weight: 700;
+        margin: 0 0 18px 0;
+        letter-spacing: 1.5px;
+        color: var(--primary);
+        text-shadow: 0 2px 16px rgba(35,41,70,0.10);
+      }
+      .hero p {
+        font-size: 1.22em;
+        color: var(--muted);
+        margin: 0 0 38px 0;
+        max-width: 540px;
+        text-align: center;
+      }
+      .cta-btn {
+        background: linear-gradient(90deg, #eebbc3 0%, #232946 100%);
+        color: #fff;
+        border: none;
+        padding: 18px 54px;
+        font-size: 1.18em;
+        border-radius: 32px;
+        cursor: pointer;
+        font-family: 'Inter', Arial, sans-serif;
+        font-weight: 700;
+        box-shadow: 0 4px 18px rgba(35,41,70,0.13);
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+      }
+      .cta-btn:hover {
+        background: linear-gradient(90deg, #232946 0%, #eebbc3 100%);
+        color: var(--primary);
+        box-shadow: 0 10px 32px rgba(238,187,195,0.18);
+        transform: translateY(-2px) scale(1.04);
+      }
+      .menu-section {
+        max-width: 1100px;
+        margin: 80px auto 0 auto;
+        background: none;
+        padding: 0 16px;
+      }
+      .menu-section h2 {
+        text-align: center;
+        font-size: 2.2em;
+        margin-bottom: 44px;
+        color: var(--primary);
+        font-family: 'Inter', Arial, sans-serif;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .menu-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 44px;
+      }
+      .menu-item {
+        background: var(--glass-bg);
+        border-radius: 26px;
+        padding: 44px 28px 32px 28px;
+        box-shadow: 0 8px 32px rgba(35,41,70,0.13);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.18s, box-shadow 0.18s, background 0.18s, filter 0.18s;
+        position: relative;
+        backdrop-filter: blur(8px);
+        border: 1.5px solid var(--glass-border);
+        filter: drop-shadow(0 2px 8px rgba(238,187,195,0.10));
+      }
+      .menu-item:hover {
+        transform: translateY(-14px) scale(1.06) rotate(-1deg);
+        box-shadow: 0 24px 64px rgba(35,41,70,0.20);
+        background: rgba(255,255,255,0.99);
+        filter: drop-shadow(0 8px 24px rgba(238,187,195,0.18));
+      }
+      .menu-icon {
+        font-size: 2.2em;
+        margin-bottom: 16px;
+        filter: drop-shadow(0 2px 8px rgba(238,187,195,0.13));
+        transition: transform 0.18s;
+      }
+      .menu-item:hover .menu-icon {
+        transform: scale(1.18) rotate(6deg);
+      }
+      .menu-item h4 {
+        margin: 0 0 12px 0;
+        font-size: 1.22em;
+        color: var(--primary);
+        font-family: 'Inter', Arial, sans-serif;
+        font-weight: 600;
+      }
+      .menu-item p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 1.08em;
+      }
+      .menu-item .price {
+        display: block;
+        margin-top: 16px;
+        font-size: 1.18em;
+        color: var(--accent);
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .location-section {
+        max-width: 520px;
+        margin: 90px auto 56px auto;
+        background: var(--glass-bg);
+        color: var(--primary);
+        border-radius: 26px;
+        box-shadow: 0 8px 32px rgba(35,41,70,0.13);
+        padding: 44px 32px 32px 32px;
+        text-align: center;
+        font-family: 'Inter', Arial, sans-serif;
+        backdrop-filter: blur(8px);
+        border: 1.5px solid var(--glass-border);
+      }
+      .location-section h3 {
+        margin-top: 0;
+        font-size: 1.35em;
+        color: var(--primary);
+        letter-spacing: 1px;
+        font-weight: 700;
+      }
+      .location-section p {
+        font-size: 1.08em;
+        margin: 10px 0 0 0;
+        color: var(--muted);
+        opacity: 0.93;
+      }
+      .location-pin {
+        font-size: 2.2em;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .map-embed {
+        width: 100%;
+        height: 220px;
+        border: none;
+        border-radius: 16px;
+        margin: 18px 0 0 0;
+        box-shadow: 0 2px 12px rgba(35,41,70,0.10);
+      }
+      .contact-details {
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: 1.04em;
+        letter-spacing: 0.5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      .contact-details span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .contact-icon {
+        font-size: 1.15em;
+        color: var(--accent);
+      }
+      footer {
+        width: 100%;
+        background: var(--primary);
+        color: #fff;
+        text-align: center;
+        padding: 28px 0 18px 0;
+        font-size: 1em;
+        letter-spacing: 1px;
+        font-family: 'Inter', Arial, sans-serif;
+        margin-top: 40px;
+      }
+      @media (max-width: 900px) {
+        .navbar .logo { margin-left: 12px; }
+        .nav-links { margin-right: 12px; gap: 16px; }
+        .modal-content { max-width: 95vw; padding: 24px 8px 18px 8px; }
+      }
+      df-messenger {
+        --df-messenger-titlebar-background: linear-gradient(90deg, #eebbc3 0%, #e0e7ff 100%);
+        --df-messenger-titlebar-font-color: #232946;
+        --df-messenger-titlebar-font-family: 'Inter', Arial, sans-serif;
+        --df-messenger-titlebar-font-size: 1.1em;
+        --df-messenger-titlebar-font-weight: 700;
+        --df-messenger-border-radius: 18px;
+        --df-messenger-titlebar-border-radius: 18px 18px 0 0;
+        --df-messenger-chat-background-color: rgba(255,255,255,0.85);
+        --df-messenger-user-message: #eebbc3;
+        --df-messenger-bot-message: #fff;
+        --df-messenger-font-color: #232946;
+        --df-messenger-chatbox-shadow: 0 6px 24px rgba(35,41,70,0.13);
+        --df-messenger-send-icon: #eebbc3;
+        --df-messenger-minimized-chat-icon: #eebbc3;
+        --df-messenger-button-titlebar-color: #eebbc3;
+        --df-messenger-accent-color: #eebbc3;
+      }
+      df-messenger {
+        border-radius: 18px !important;
+        box-shadow: 0 6px 24px rgba(35,41,70,0.13) !important;
+        overflow: hidden !important;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="#" class="logo">Sattva</a>
+      <div class="nav-links">
+        <a href="#" class="nav-link" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Home</a>
+        <button class="nav-link" onclick="openModal('aboutModal')">About</button>
+        <button class="nav-link" onclick="openModal('contactModal')">Contact</button>
+      </div>
+    </nav>
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+        <h2>About Sattva Restaurant Project</h2>
+        <p><b>Sattva Restaurant</b> is a demonstration of a modern, AI-powered food ordering platform designed to streamline the restaurant experience for both customers and staff. This project integrates advanced conversational AI with robust backend technology to deliver a seamless, interactive, and efficient ordering process.</p>
+        <ul>
+          <li><b>Frontend:</b> Responsive, modern UI using HTML5 &amp; CSS3 (glassmorphism, mobile-friendly design)</li>
+          <li><b>Backend:</b> FastAPI (Python) for scalable, high-performance APIs</li>
+          <li><b>Conversational AI:</b> Dialogflow Messenger (Google Cloud) for natural language customer interaction</li>
+          <li><b>Database:</b> Cloud-hosted MySQL for secure, reliable data management</li>
+        </ul>
+        <p>Key features include real-time chatbot ordering, menu browsing, order tracking, and cloud deployment. Sattva Restaurant exemplifies the future of digital dining through technology-driven hospitality.</p>
+      </div>
+    </div>
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('contactModal')">&times;</span>
+        <h2>Contact Information</h2>
+        <div class="contact-details" style="margin-top: 0;">
+          <span><span class="contact-icon">✉️</span>Email: info@sattvarestaurant.com</span>
+          <span><span class="contact-icon">📞</span>Phone: (212) 555-1234</span>
+          <span><span class="contact-icon">📍</span>123 Broadway Ave, New York, NY 10001</span>
+        </div>
+      </div>
+    </div>
+    <section class="hero">
+      <div class="hero-content">
+        <h2 style="font-family: 'Inter', Arial, sans-serif; font-weight: 700; font-size: 2em; color: #232946; letter-spacing: 0.04em; margin-bottom: 18px; text-align: center;">Where Cultures Collide in Cuisine</h2>
+        <p>Minimal, modern Indian cuisine in the heart of New York. Chat with our AI assistant to order, track, or ask about our menu. Click the chat icon at the bottom right to get started!</p>
+        <button class="cta-btn" onclick="window.scrollTo({top: document.querySelector('.menu-section').offsetTop, behavior: 'smooth'});">View Menu</button>
+      </div>
+    </section>
+    <section class="menu-section">
+      <h2>Popular Menu Items</h2>
+      <div class="menu-list">
+        <div class="menu-item">
+          <div class="menu-icon">🥗</div>
+          <h4>Pav Bhaji</h4>
+          <p>Spicy mashed vegetables with buttered bread.<span class="price">$6.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🍛</div>
+          <h4>Chole Bhature</h4>
+          <p>Fluffy fried bread with spicy chickpeas.<span class="price">$7.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🍕</div>
+          <h4>Pizza</h4>
+          <p>Cheesy, oven-baked pizza with your choice of toppings.<span class="price">$8.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🥭</div>
+          <h4>Mango Lassi</h4>
+          <p>Refreshing yogurt drink with mango.<span class="price">$5.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🌯</div>
+          <h4>Masala Dosa</h4>
+          <p>Crispy rice crepe with spicy potato filling.<span class="price">$6.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🍚</div>
+          <h4>Vegetable Biryani</h4>
+          <p>Fragrant rice with mixed vegetables and spices.<span class="price">$9.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🍔</div>
+          <h4>Vada Pav</h4>
+          <p>Spicy potato fritter in a bun.<span class="price">$4.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🥞</div>
+          <h4>Rava Dosa</h4>
+          <p>Thin, crispy dosa made with semolina.<span class="price">$7.00</span></p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🥟</div>
+          <h4>Samosa</h4>
+          <p>Fried pastry with savory filling.<span class="price">$5.00</span></p>
+        </div>
+      </div>
+    </section>
+    <section class="location-section">
+      <div class="location-pin">📍</div>
+      <h3>Our Location</h3>
+      <p>123 Broadway Ave,<br>New York, NY 10001<br>United States</p>
+      <iframe class="map-embed" src="https://www.google.com/maps?q=123+Broadway+Ave,+New+York,+NY+10001&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="contact-details">
+        <span><span class="contact-icon">✉️</span>Email: info@sattvarestaurant.com</span>
+        <span><span class="contact-icon">📞</span>Phone: (212) 555-1234</span>
+      </div>
+    </section>
+    <footer>
+      &copy; 2024 Sattva Restaurant &mdash; Modern Indian Cuisine in New York
+    </footer>
+    <!-- Dialogflow Messenger Widget -->
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger
+      intent="WELCOME"
+      chat-title="KARA"
+      agent-id="c8d4f419-7886-4a2e-a26a-3f3cc12b48f2"
+      language-code="en"
+    ></df-messenger>
+    <script>
+      // Modal logic
+      function openModal(id) {
+        document.getElementById(id).style.display = 'block';
+      }
+      function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+      }
+      // Close modal on outside click
+      window.onclick = function(event) {
+        const about = document.getElementById('aboutModal');
+        const contact = document.getElementById('contactModal');
+        if (event.target === about) about.style.display = 'none';
+        if (event.target === contact) contact.style.display = 'none';
+      }
+    </script>
+  </body>
+</html>
